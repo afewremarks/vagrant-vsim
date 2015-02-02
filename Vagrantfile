@@ -80,9 +80,11 @@ Vagrant.configure(2) do |config|
     servicevm.vm.box = "trusty"
     servicevm.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     servicevm.vm.hostname = "servicevm"
+	servicevm.ssh.insert_key = false
     servicevm.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "128"]
       vb.customize ["modifyvm", :id, "--cpus", "1"]
+	  # vb.customize "post-comm", ["guestproperty", "wait", :id, "foobar", "--timeout", "1000", "2> nul"]
     end
     servicevm.vm.network "private_network", ip: SERVICEVM_HOST_IP
     servicevm.vm.provision :shell, :path => "service.sh"
@@ -107,7 +109,8 @@ Vagrant.configure(2) do |config|
     if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.5.0')
     end
     vsim.ssh.host = SERVICEVM_HOST_IP
-    vsim.ssh.forward_agent = true
+    vsim.ssh.insert_key = false
+	vsim.ssh.forward_agent = true
     vsim.ssh.port = "22222"
     vsim.vm.boot_timeout = 800
     vsim.vm.synced_folder '.', '/vagrant', disabled: true
@@ -120,61 +123,61 @@ Vagrant.configure(2) do |config|
     vsim.vm.provision :shell, :path => "vsim.sh"
 
     vsim.vm.provider "virtualbox" do |p|
-      # p.gui = true
+      p.gui = true
 
       # https://stackoverflow.com/a/20860087
       if ! File.exists?(".vagrant/machines/vsim/virtualbox/id")
 
         # wait at boot
-        p.customize "post-boot", ["guestproperty", "wait", :id, "foobar", "--timeout", "10000"]
+        # p.customize "post-comm", ["guestproperty", "wait", :id, "foobar", "--timeout", "10000"]
         # send "?"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "2a", "35", "b5", "aa", "1c", "9c"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "2a", "35", "b5", "aa", "1c", "9c"]
 
         # send "setenv boot"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode","1f","9f","12","92","14","94","12","92","31","b1","2f","af","39","b9","30","b0","18","98","18","98","14","94"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode","1f","9f","12","92","14","94","12","92","31","b1","2f","af","39","b9","30","b0","18","98","18","98","14","94"]
 
         # send "arg.vm."
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode","1e","9e","13","93","22","a2","34","b4","2f","af","32","b2","34","b4"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode","1e","9e","13","93","22","a2","34","b4","2f","af","32","b2","34","b4"]
 
         # send "run_vmtools"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode","13","93","16","96","31","b1","2a","0c","8c","aa","2f","af","32","b2","14","94","18","98","18","98","26","a6","1f","9f"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode","13","93","16","96","31","b1","2a","0c","8c","aa","2f","af","32","b2","14","94","18","98","18","98","26","a6","1f","9f"]
 
         # send " false<Enter>"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode","39","b9","21","a1","1e","9e","26","a6","1f","9f","12","92","1c","9c"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode","39","b9","21","a1","1e","9e","26","a6","1f","9f","12","92","1c","9c"]
 
-        p.customize "post-boot", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
+        #  p.customize "post-comm", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
 
         # send "set bootarg"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "1f", "9f", "12", "92", "14", "94", "39", "b9", "30", "b0", "18", "98", "18", "98", "14", "94", "1e", "9e", "13", "93", "22", "a2"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "1f", "9f", "12", "92", "14", "94", "39", "b9", "30", "b0", "18", "98", "18", "98", "14", "94", "1e", "9e", "13", "93", "22", "a2"]
 
         # send ".init.dhcp."
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "34", "b4", "17", "97", "31", "b1", "17", "97", "14", "94", "34", "b4", "20", "a0", "23", "a3", "2e", "ae", "19", "99", "34", "b4"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "34", "b4", "17", "97", "31", "b1", "17", "97", "14", "94", "34", "b4", "20", "a0", "23", "a3", "2e", "ae", "19", "99", "34", "b4"]
 
         # send "disable="
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "20", "a0", "17", "97", "1f", "9f", "1e", "9e", "30", "b0", "26", "a6", "12", "92", "0d", "8d"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "20", "a0", "17", "97", "1f", "9f", "1e", "9e", "30", "b0", "26", "a6", "12", "92", "0d", "8d"]
 
         # send "false<ENTER>"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "21", "a1", "1e", "9e", "26", "a6", "1f", "9f", "12", "92", "1c", "9c"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "21", "a1", "1e", "9e", "26", "a6", "1f", "9f", "12", "92", "1c", "9c"]
 
-        p.customize "post-boot", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
+        #  p.customize "post-comm", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
 
         # send "set bootarg"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "1f", "9f", "12", "92", "14", "94", "39", "b9", "30", "b0", "18", "98", "18", "98", "14", "94", "1e", "9e", "13", "93", "22", "a2"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "1f", "9f", "12", "92", "14", "94", "39", "b9", "30", "b0", "18", "98", "18", "98", "14", "94", "1e", "9e", "13", "93", "22", "a2"]
 
         # send ".bootmenu"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "34", "b4", "30", "b0", "18", "98", "18", "98", "14", "94", "32", "b2", "12", "92", "31", "b1", "16", "96"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "34", "b4", "30", "b0", "18", "98", "18", "98", "14", "94", "32", "b2", "12", "92", "31", "b1", "16", "96"]
 
 
         # send ".selection"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "34", "b4", "1f", "9f", "12", "92", "26", "a6", "12", "92", "2e", "ae", "14", "94", "17", "97", "18", "98", "31", "b1"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "34", "b4", "1f", "9f", "12", "92", "26", "a6", "12", "92", "2e", "ae", "14", "94", "17", "97", "18", "98", "31", "b1"]
 
         # send "=4a<Enter>"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode", "0d", "8d", "05", "85", "1e", "9e", "1c", "9c"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode", "0d", "8d", "05", "85", "1e", "9e", "1c", "9c"]
 
-        p.customize "post-boot", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
+        # p.customize "post-comm", ["guestproperty", "wait", :id, "foobar", "--timeout", "2000"]
 
         # send "boot<Enter>"
-        p.customize "post-boot", ["controlvm", :id, "keyboardputscancode","30","b0","18","98","18","98","14","94","1c","9c"]
+        p.customize "post-comm", ["controlvm", :id, "keyboardputscancode","30","b0","18","98","18","98","14","94","1c","9c"]
       end
     end
   end

@@ -112,7 +112,7 @@ def add_vsim
   if !File.exists?(File.expand_path("../#{BASE_IMAGE}", __FILE__))
     puts "\n\n"
     puts "#{BOX_NAME} base image #{BASE_IMAGE} not found."
-    puts "Download the Clustered-Ontap Simulator 8.2.1 for VMware Workstation, VMware Player, and VMware Fusion from"
+    puts "Download the Clustered-Ontap Simulator 8.2.2P1 for VMware Workstation, VMware Player, and VMware Fusion from"
     puts "http://mysupport.netapp.com/NOW/download/tools/simulator/ontap/8.X/"
     puts "Save the dowloaded base image file #{BASE_IMAGE} in this directory and run 'vagrant up' again."
     return
@@ -167,7 +167,7 @@ Vagrant::Config.run do |config|
     if ENV['CLUSTER_BASE_LICENSE'].nil? || ENV['CLUSTER_BASE_LICENSE'].empty?
       puts "\n\n"
       puts "The cluster base license has not been specified."
-      puts "Obtain the Clustered-Ontap Simulator 8.2.1 cluster base license from"
+      puts "Obtain the Clustered-Ontap Simulator 8.2.2 cluster base license from"
       puts "http://mysupport.netapp.com/NOW/download/tools/simulator/ontap/8.X/"
       puts "Edit vsim.conf, at the top set CLUSTER_BASE_LICENSE accordingly."
       exit

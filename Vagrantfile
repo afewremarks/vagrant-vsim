@@ -10,7 +10,7 @@ VBOXNET_HOST_GW_IP ||= NODE_MGMT_IP.rpartition(".")[0] + ".254"
 SERVICEVM_HOST_IP ||= NODE_MGMT_IP.rpartition(".")[0] + ".253"
 BOX_NAME ||= "VSim"
 BASE_IMAGE ||= "vsim_netapp-cm.tgz"
-
+VAGRANT_MINVERSION = '1.7.2'
 
 module VagrantPlugins
   module VSimPlugin
@@ -155,6 +155,11 @@ end
 
 
 Vagrant::Config.run do |config|
+  if Gem::Version.new(Vagrant::VERSION) < Gem::Version.new(VAGRANT_MINVERSION)
+      puts "Vagrant version #{Gem::Version.new(Vagrant::VERSION)} detected. But Vagrant version #{VAGRANT_MINVERSION} or greater is required. Please update Vagrant."
+      exit
+  end
+
   # https://stackoverflow.com/a/20860087
   if ! File.exists?(".vagrant/machines/vsim/virtualbox/id")
     ask_to_add_vsim_unless_exists
@@ -202,11 +207,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define BOX_NAME.downcase do |vsim|
     vsim.vm.box = BOX_NAME
-    if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.5.0')
-    end
     vsim.ssh.host = SERVICEVM_HOST_IP
     vsim.ssh.insert_key = false
-	vsim.ssh.forward_agent = true
+	  vsim.ssh.forward_agent = true
     vsim.ssh.port = "22222"
     vsim.vm.boot_timeout = 800
     vsim.vm.synced_folder '.', '/vagrant', disabled: true

@@ -13,8 +13,6 @@ CLUSTER_USERNAME=${CLUSTER_USERNAME:-vagrant}
 PASSWORD=${PASSWORD:-netapp123}
 API_ENDPOINT="http://admin@$NODE_MGMT_IP/servlets/netapp.servlets.admin.XMLrequest_filer"
 
-sudo tc qdisc del dev eth1 root netem
-
 sudo iptables -t nat -D PREROUTING -i eth1 -p tcp --dport 22222 -j REDIRECT --to-port 22 
 
 sudo echo "1" > /proc/sys/net/ipv4/ip_forward
@@ -133,7 +131,7 @@ echo "Creating additional aggregate"
 /usr/bin/curl -X POST -d "$AGGR_CREATE"  -sS --noproxy $NODE_MGMT_IP $API_ENDPOINT
 sleep 15
 echo "Adding public key for $CLUSTER_USERNAME"
-sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $CLUSTER_USERNAME@$NODE_MGMT_IP -t 'security login publickey create -username vagrant -index 0 -publickey "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ=="'
+sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $CLUSTER_USERNAME@$NODE_MGMT_IP -t 'security login publickey create -username vagrant -index 0 -publickey "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ=="' 2>/dev/null
 
 echo "SSH is available at $NODE_MGMT_IP. username $CLUSTER_USERNAME, password $PASSWORD"
 echo "VSim ready. Run 'vagrant ssh vsim' for console access."

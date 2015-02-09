@@ -10,5 +10,3 @@ EOF
 sudo /etc/init.d/dnsmasq restart
 
 sudo iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 22222 -j REDIRECT --to-port 22
-
-sudo tc qdisc add dev eth1 root netem delay 400ms

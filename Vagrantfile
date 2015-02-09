@@ -24,14 +24,20 @@ def add_vsim
   puts "Preparing to add #{BOX_NAME} to vagrant. This may take a few minutes."
   template_dir = File.join("template", ".")
   tmp_dir = "tmp"
-  FileUtils.mkdir tmp_dir
-  FileUtils.cp_r template_dir, tmp_dir
-  puts "Extracting #{BOX_NAME} base image to #{tmp_dir} directory"
-  `tar zxvf #{BASE_IMAGE} --strip-components=1 --directory #{tmp_dir}`
+  FileUtils.mkdir tmp_dir 
+  result = Vagrant::Util::Subprocess.execute(
+"bsdtar", "-v", "-x", "-m", "-C", tmp_dir.to_s, "-f", BASE_IMAGE.to_s)
+  vsim_dir = File.join(tmp_dir, "vsim_netapp-cm")
+  FileUtils.cp_r template_dir, vsim_dir
   puts "Packaging #{BOX_NAME} box for vagrant"
-  `cd #{tmp_dir} && tar cvzf #{BOX_NAME}.box *`
+  
+  box_target = File.join(tmp_dir, "#{BOX_NAME}.box")
+  Vagrant::Util::SafeChdir.safe_chdir(vsim_dir) do
+	files = Dir.glob(File.join(".", "*"))
+	result = Vagrant::Util::Subprocess.execute("bsdtar", "-c", "-v", "-z","-f", "#{BOX_NAME}.box", *files)
+  end	
   puts "Adding #{BOX_NAME} box to vagrant"
-  `cd #{tmp_dir} && vagrant box add #{BOX_NAME} #{BOX_NAME}.box`
+  `cd #{vsim_dir} && vagrant box add #{BOX_NAME} #{BOX_NAME}.box`
   FileUtils.rm_rf tmp_dir
   puts "Done: #{BOX_NAME} box added to vagrant."
 end
@@ -61,7 +67,6 @@ Vagrant::Config.run do |config|
   # https://stackoverflow.com/a/20860087
   if ! File.exists?(".vagrant/machines/vsim/virtualbox/id")
     ask_to_add_vsim_unless_exists
-
     if ENV['CLUSTER_BASE_LICENSE'].nil? || ENV['CLUSTER_BASE_LICENSE'].empty?
       puts "\n\n"
       puts "The cluster base license has not been specified."

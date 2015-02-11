@@ -8,9 +8,9 @@
   </References>
   <DiskSection>
     <Info>List of the virtual disks used in the package</Info>
-    <Disk ovf:capacity="1108344832" ovf:diskId="vmdisk1" ovf:fileRef="file1" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="e9e1653a-1042-467f-ae62-69920d6f2650"/>
+    <Disk ovf:capacity="2037383168" ovf:diskId="vmdisk1" ovf:fileRef="file1" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="e9e1653a-1042-467f-ae62-69920d6f2650"/>
     <Disk ovf:capacity="1616904192" ovf:diskId="vmdisk2" ovf:fileRef="file2" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="7d8f685b-34bf-49fc-9a06-4b66a996481a"/>
-    <Disk ovf:capacity="5370806272" ovf:diskId="vmdisk3" ovf:fileRef="file3" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="3512b4d3-ebab-4c68-9f62-1379eb467f33"/>
+    <Disk ovf:capacity="5101322240" ovf:diskId="vmdisk3" ovf:fileRef="file3" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="3512b4d3-ebab-4c68-9f62-1379eb467f33"/>
     <Disk ovf:capacity="268435456000" ovf:diskId="vmdisk4" ovf:fileRef="file4" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" vbox:uuid="1bf9a976-bde3-4619-a9ec-1d04814938b4"/>
   </DiskSection>
   <NetworkSection>
@@ -44,12 +44,12 @@
       </Item>
       <Item>
         <rasd:AllocationUnits>MegaBytes</rasd:AllocationUnits>
-        <rasd:Caption>1600 MB of memory</rasd:Caption>
+        <rasd:Caption>2000 MB of memory</rasd:Caption>
         <rasd:Description>Memory Size</rasd:Description>
-        <rasd:ElementName>1600 MB of memory</rasd:ElementName>
+        <rasd:ElementName>2000 MB of memory</rasd:ElementName>
         <rasd:InstanceID>2</rasd:InstanceID>
         <rasd:ResourceType>4</rasd:ResourceType>
-        <rasd:VirtualQuantity>1600</rasd:VirtualQuantity>
+        <rasd:VirtualQuantity>2000</rasd:VirtualQuantity>
       </Item>
       <Item>
         <rasd:Address>0</rasd:Address>

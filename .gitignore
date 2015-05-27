@@ -1,2 +1,9 @@
 /.vagrant/*
 vsim_netapp-cm.tgz
+vsim.conf
+template/DataONTAP-nvram.vmdk
+template/DataONTAP-sim.vmdk
+template/DataONTAP-var.vmdk
+template/DataONTAP.vmdk
+template/box.ovf
+vsim.conf
